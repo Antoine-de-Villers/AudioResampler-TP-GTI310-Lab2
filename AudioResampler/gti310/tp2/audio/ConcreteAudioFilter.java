@@ -1,5 +1,6 @@
 package gti310.tp2.audio;
 
+<<<<<<< HEAD
 import gti310.tp2.io;
 
 public class ConcreteAudioFilter implements AudioFilter {
@@ -24,4 +25,14 @@ public class ConcreteAudioFilter implements AudioFilter {
 		
 		
 	}
+=======
+public class ConcreteAudioFilter implements AudioFilter {
+
+	@Override
+	public void process() {
+		// TODO Auto-generated method stub
+
+	}
+
+>>>>>>> 9046202dd64dd0d8831c07c91ad6c0301f568045
 }
