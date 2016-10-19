@@ -6,10 +6,10 @@ import gti310.tp2.audio.ConcreteAudioFilter;
 
 public class Console {
 
+	private String fichierAManipuler, fichierACreer="";
 	
 	
 	public void run(){
-		String fichierAManipuler, fichierACreer="";
 		AudioFilter audioFilter;
 		Scanner sc = new Scanner(System.in);
 		boolean commandeValide = false;
@@ -23,29 +23,30 @@ public class Console {
 						+ "écrire la commande désirée et rajouter help à la suite afin de savoir à quoi sert cette commande"
 						+ " (exemple /audioresample help");
 			}
-			if (commande.equals("/quit")){
+			else if (commande.equals("/quit")){
 				quit();
 			}
-			if (commande.equals("/audiofilter")){
+			else if (commande.equals("/audiofilter")){
 				System.out.println("Veuillez entrer le nom du fichier a manipuler ainsi que le nom du fichier que"
-						+ " l'application créera dans le format suivant: \nfichierÀManipuler fichierÀCréé");
+						+ " l'application créera dans le format suivant: \nfichierÀManipuler.wav fichierÀCréé.wav");
 				String fichiersRecus = sc.nextLine();
-				String fichiersSplittes[] = fichiersRecus.split(" ");
-				fichierAManipuler = fichiersSplittes[0];
-				fichierACreer = fichiersSplittes[1];
+				if (validateFormat(fichiersRecus)){
 				audioFilter = new ConcreteAudioFilter(fichierAManipuler, fichierACreer);
 				audioFilter.process();
 				commandeValide = true;
-				
+				}	
 			}
-			if (commande.equals("/quit help")){
+			else if (commande.equals("/quit help")){
 				System.out.println("Commande utilisée afin de quitter le programme (peut être utilisée à tout moment");
 			}
-			if (commande.equals("/audiofilter help")){
+			else if (commande.equals("/audiofilter help")){
 				System.out.println("Le programme audio filter prend en charge"
 						+ " un fichier .wav de 44.1 kHz de stéréo ou mono 8 ou 16 bits"
 						+ " \npuis le manipule afin de "
 						+ "remettre un fichier .wav de 8kHz.");
+			}
+			else {
+				System.out.println("Vous avez entré une commande invalide");
 			}
 			if (commandeValide==true){
 				System.out.printf("\nLe programme s'est bien exécuté et le fichier %s a été créé. "
@@ -57,6 +58,23 @@ public class Console {
 	public void quit(){
 		System.out.println("Merci d'avoir utilisé Audio Resample Project!");
 		System.exit(0);
+	}
+	public boolean validateFormat(String s){
+		boolean validate = false;
+		try {
+			String fichiersSplittes[] = s.split(" ");
+			fichierAManipuler = fichiersSplittes[0];
+			fichierACreer = fichiersSplittes[1];
+			if (fichierAManipuler.endsWith(".wav")&&fichierACreer.endsWith(".wav")){
+				validate = true;	
+			} else{
+				System.out.println("Au moins un de vos fichiers n'est pas de type .wav");
+			}
+		}catch (Exception e){
+			e.printStackTrace();
+			System.out.println("Vous n'avez pas respecter le format demandé");
+		}
+		return validate;
 	}
 }
 
