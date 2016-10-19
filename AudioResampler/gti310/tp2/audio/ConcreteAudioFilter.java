@@ -28,6 +28,11 @@ public class ConcreteAudioFilter implements AudioFilter {
 =======
 public class ConcreteAudioFilter implements AudioFilter {
 
+	public ConcreteAudioFilter(String fichierAManipuler, String fichierACreer) {
+		// TODO Auto-generated constructor stub
+		
+	}
+
 	@Override
 	public void process() {
 		// TODO Auto-generated method stub
