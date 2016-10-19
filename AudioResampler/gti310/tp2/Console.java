@@ -9,11 +9,11 @@ public class Console {
 	
 	
 	public void run(){
-		String fichierAManipuler, fichierACreer;
+		String fichierAManipuler, fichierACreer="";
 		AudioFilter audioFilter;
-		
 		Scanner sc = new Scanner(System.in);
 		boolean commandeValide = false;
+		
 		System.out.println("Audio Resample project!");
 		while (commandeValide != true) {
 			System.out.println("Veuillez enter la commande requise (/help pour voir les commandes accessibles)");
@@ -24,8 +24,7 @@ public class Console {
 						+ " (exemple /audioresample help");
 			}
 			if (commande.equals("/quit")){
-				System.out.println("Merci d'avoir utilisé Audio Resample Project!");
-				System.exit(0);
+				quit();
 			}
 			if (commande.equals("/audiofilter")){
 				System.out.println("Veuillez entrer le nom du fichier a manipuler ainsi que le nom du fichier que"
@@ -35,11 +34,12 @@ public class Console {
 				fichierAManipuler = fichiersSplittes[0];
 				fichierACreer = fichiersSplittes[1];
 				audioFilter = new ConcreteAudioFilter(fichierAManipuler, fichierACreer);
+				audioFilter.process();
 				commandeValide = true;
 				
 			}
 			if (commande.equals("/quit help")){
-				System.out.println("Commande utilisée afin de quitter le programme");
+				System.out.println("Commande utilisée afin de quitter le programme (peut être utilisée à tout moment");
 			}
 			if (commande.equals("/audiofilter help")){
 				System.out.println("Le programme audio filter prend en charge"
@@ -47,7 +47,16 @@ public class Console {
 						+ " \npuis le manipule afin de "
 						+ "remettre un fichier .wav de 8kHz.");
 			}
+			if (commandeValide==true){
+				System.out.printf("\nLe programme s'est bien exécuté et le fichier %s a été créé. "
+						+ "\n\n\n\n", fichierACreer);
+				commandeValide=false;
+			}
 		}
+	}
+	public void quit(){
+		System.out.println("Merci d'avoir utilisé Audio Resample Project!");
+		System.exit(0);
 	}
 }
 
