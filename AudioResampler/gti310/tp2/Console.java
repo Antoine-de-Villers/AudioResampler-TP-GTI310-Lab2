@@ -32,7 +32,9 @@ public class Console {
 				String fichiersRecus = sc.nextLine();
 				if (validateFormat(fichiersRecus)){
 				audioFilter = new ConcreteAudioFilter(fichierAManipuler, fichierACreer);
+				if (audioFilter.validate()){
 				audioFilter.process();
+				}
 				commandeValide = true;
 				}	
 			}
@@ -49,7 +51,7 @@ public class Console {
 				System.out.println("Vous avez entré une commande invalide");
 			}
 			if (commandeValide==true){
-				System.out.printf("\nLe programme s'est bien exécuté et le fichier %s a été créé. "
+				System.out.printf("\nLe programme s'est bien exécuté et le fichier %s a été créé. (/quit pour quitter) "
 						+ "\n\n\n\n", fichierACreer);
 				commandeValide=false;
 			}
