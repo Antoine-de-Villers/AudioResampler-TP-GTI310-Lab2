@@ -44,11 +44,20 @@ public class ConcreteAudioFilter implements AudioFilter {
 	
 	public boolean validate(){
 		
+<<<<<<< HEAD
 		
 		tampon = reader.pop(44);
 		
         if((((int)tampon[8]& 0xff) << 24) + (((int) tampon[9]& 0xff) << 16) + (((int)tampon[10]& 0xff) <<8) + ((int)tampon[11]& 0xff) == 0x57415645){ //verification Format 
         	if((((int)tampon[24]& 0xff)) + (((int) tampon[25]& 0xff) << 8) + (((int)tampon[26]& 0xff) <<16) + (((int)tampon[27]& 0xff) <<24) == 44100){ //verification Sample Rate
+=======
+		byte[] header;
+		header = reader.pop(44);
+		int test = ((int)header[24]& 0xff) + (((int) header[25]& 0xff) << 8) + (((int)header[26]& 0xff) <<16) + (((int)header[27]& 0xff) << 24);
+		System.out.println(test+"\n");
+        if((((int)header[8]& 0xff) << 24) + (((int) header[9]& 0xff) << 16) + (((int)header[10]& 0xff) <<8) + ((int)header[11]& 0xff) == 0x57415645){ //verification Format 
+        	if( test == 44100){ //verification Sample Rate
+>>>>>>> a3e21b881a6146b53acac0bc60b862e55f93668d
 			
         		return true;
 			
