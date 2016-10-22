@@ -47,8 +47,8 @@ public class ConcreteAudioFilter implements AudioFilter {
 		byte[] header;
 		header = reader.pop(44);
 		
-        if(((int)header[8]& 0xff << 24) + ((int) header[9]& 0xff << 16) + ((int)header[10]& 0xff <<8) + ((int)header[11]& 0xff) == 0x57415645){ //verification Format 
-        	if(((int)header[24]& 0xff << 24) + ((int) header[25]& 0xff << 16) + ((int)header[26]& 0xff <<8) + ((int)header[27]& 0xff) == 44100){ //verification Sample Rate
+        if((((int)header[8]& 0xff) << 24) + (((int) header[9]& 0xff) << 16) + (((int)header[10]& 0xff) <<8) + ((int)header[11]& 0xff) == 0x57415645){ //verification Format 
+        	if((((int)header[24]& 0xff) << 24) + (((int) header[25]& 0xff) << 16) + (((int)header[26]& 0xff) <<8) + ((int)header[27]& 0xff) == 44100){ //verification Sample Rate
 			
         		return true;
 			
