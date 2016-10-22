@@ -32,7 +32,7 @@ public class Console {
 				String fichiersRecus = sc.nextLine();
 				if (validateFormat(fichiersRecus)){
 				audioFilter = new ConcreteAudioFilter(fichierAManipuler, fichierACreer);
-				if (audioFilter.validate()){
+				if (((ConcreteAudioFilter) audioFilter).validate()){
 				audioFilter.process();
 				}
 				commandeValide = true;
