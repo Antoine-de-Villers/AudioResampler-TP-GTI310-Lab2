@@ -7,7 +7,7 @@ public class ConcreteAudioFilter implements AudioFilter {
 
 	FileSource reader;
 	FileSink writer;
-	
+	byte[] tampon;
 	
 	public ConcreteAudioFilter(String fichierAManipuler, String fichierACreer) {
 		// TODO Auto-generated constructor stub
@@ -44,11 +44,11 @@ public class ConcreteAudioFilter implements AudioFilter {
 	
 	public boolean validate(){
 		
-		byte[] header;
-		header = reader.pop(44);
 		
-        if((((int)header[8]& 0xff) << 24) + (((int) header[9]& 0xff) << 16) + (((int)header[10]& 0xff) <<8) + ((int)header[11]& 0xff) == 0x57415645){ //verification Format 
-        	if((((int)header[24]& 0xff) << 24) + (((int) header[25]& 0xff) << 16) + (((int)header[26]& 0xff) <<8) + ((int)header[27]& 0xff) == 44100){ //verification Sample Rate
+		tampon = reader.pop(44);
+		
+        if((((int)tampon[8]& 0xff) << 24) + (((int) tampon[9]& 0xff) << 16) + (((int)tampon[10]& 0xff) <<8) + ((int)tampon[11]& 0xff) == 0x57415645){ //verification Format 
+        	if((((int)tampon[24]& 0xff)) + (((int) tampon[25]& 0xff) << 8) + (((int)tampon[26]& 0xff) <<16) + (((int)tampon[27]& 0xff) <<24) == 44100){ //verification Sample Rate
 			
         		return true;
 			
