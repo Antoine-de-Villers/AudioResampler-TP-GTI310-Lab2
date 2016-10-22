@@ -53,11 +53,16 @@ public class ConcreteAudioFilter implements AudioFilter {
 =======
 		byte[] header;
 		header = reader.pop(44);
+<<<<<<< HEAD
 		int test = ((int)header[24]& 0xff) + (((int) header[25]& 0xff) << 8) + (((int)header[26]& 0xff) <<16) + (((int)header[27]& 0xff) << 24);
 		System.out.println(test+"\n");
         if((((int)header[8]& 0xff) << 24) + (((int) header[9]& 0xff) << 16) + (((int)header[10]& 0xff) <<8) + ((int)header[11]& 0xff) == 0x57415645){ //verification Format 
         	if( test == 44100){ //verification Sample Rate
 >>>>>>> a3e21b881a6146b53acac0bc60b862e55f93668d
+=======
+        if((((int)header[8]& 0xff) << 24) + (((int) header[9]& 0xff) << 16) + (((int)header[10]& 0xff) <<8) + ((int)header[11]& 0xff) == 0x57415645){ //verification Format in big endian
+        	if(((int)header[24]& 0xff) + (((int) header[25]& 0xff) << 8) + (((int)header[26]& 0xff) <<16) + (((int)header[27]& 0xff) << 24) == 44100){ //verification Sample Rate in little endian
+>>>>>>> origin/master
 			
         		return true;
 			
