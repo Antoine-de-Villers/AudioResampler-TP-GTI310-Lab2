@@ -38,6 +38,29 @@ public class ConcreteAudioFilter implements AudioFilter {
 		// nous devons diviser l'amplitude totale selon un temps de 5.125 sec.
 		// pour conserver un meme temps finale
 
+		downsample();
+	}
+	
+	private void downsample(){
+		// resample the sample with correct frequency
+		int sampleSize = 44100; //nombre de KHz du sample de base
+		int finalSampleSize = 8000; //nombre de KHz du sample à la fin
+		int channelSize = ((int)tampon[22] & 0xff) + (((int) tampon[23] & 0xff) << 8);
+		int bitPerSample = ((int)tampon[34] & 0xff) + (((int)tampon[35] & 0xff) << 8);
+		byte[] newTampon;
+		double ratio = sample/finalSampleSize; //ratio de conversion
+		int tempo;
+		
+		for (double i=0;i<sampleSize;i+ratio){
+				if (i-(int)i>0.5){
+				tampon= reader.pop()
+				}
+				else {
+					
+				}
+		}
+		
+		
 	}
 
 	public boolean validate() {
