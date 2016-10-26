@@ -50,31 +50,29 @@ public class ConcreteAudioFilter implements AudioFilter {
 	private void downSample() {
 		// resample the sample with correct frequency
 		int sampleSize = 44100; // nombre de KHz du sample de base
-		int finalSampleSize = 8000; // nombre de KHz du sample � la fin
+		int finalSampleSize = 8000; // nombre de KHz du sample a la fin
 		int channelSize = ((int) tampon[22] & 0xff) + (((int) tampon[23] & 0xff) << 8);
 		int bitPerSample = ((int) tampon[34] & 0xff) + (((int) tampon[35] & 0xff) << 8);
 		double tempsFinal = getTime();
 		byte[] newTampon = new byte[1];
 		System.out.println(getTime());
-		double ratio = sampleSize / finalSampleSize; // ratio de conversion
+		double ratio = (double)sampleSize / (double)finalSampleSize; // ratio de conversion
 
-		for (int temps = 0; temps < tempsFinal; temps++) {
-
-			for (double i = 0; i < sampleSize; i = i + ratio) {
-				if (i - (int) i > 0.5) {
+		for (int temps = 0; temps <= tempsFinal; temps++) {
+			
+			for (double i = 0; i < sampleSize*channelSize*bitPerSample/8; i = i + ratio) {
+				if (i - ((int) i) > (ratio/10)) {
 					tampon = reader.pop(6);
 				} else {
 					tampon = reader.pop(5);
 				}
-				for (int j = 0; j < tampon.length - 1; j++) {
+				for (int j = 0; j < tampon.length; j++) {
 					newTampon[0] += tampon[j];
 				}
 				newTampon[0] /= tampon.length;
 				writer.push(newTampon);
-
 			}
 		}
-
 	}
 
 	private double getTime() {
@@ -112,10 +110,10 @@ public class ConcreteAudioFilter implements AudioFilter {
 				+ (((int) tampon[31] & 0xff));
 		byteChange /=5.5125;
 				
-		tampon[24]= (byte) byteChange;
-		tampon[25]=	(byte) ((byteChange >> 8) & 0xff);	
-		tampon[26]= (byte) ((byteChange >> 16) & 0xff);
-		tampon[27]= (byte) ((byteChange >> 24) & 0xff);		
+		tampon[28]= (byte) byteChange;
+		tampon[29]=	(byte) ((byteChange >> 8) & 0xff);	
+		tampon[30]= (byte) ((byteChange >> 16) & 0xff);
+		tampon[31]= (byte) ((byteChange >> 24) & 0xff);		
 		
 		//changement de subchunk2size
 		byteChange = (((int) tampon[40] & 0xff)) + (((int) tampon[41] & 0xff) << 8) + (((int) tampon[42] & 0xff) << 16)
@@ -129,10 +127,10 @@ public class ConcreteAudioFilter implements AudioFilter {
 		tampon[43]= (byte) ((byteChange >> 24) & 0xff);
 		
 		//changement chunk
-		tampon[40]= (byte) chunk;
-		tampon[41]=	(byte) ((chunk >> 8) & 0xff);	
-		tampon[42]= (byte) ((chunk >> 16) & 0xff);
-		tampon[43]= (byte) ((chunk >> 24) & 0xff);
+		tampon[4]= (byte) chunk;
+		tampon[5]=	(byte) ((chunk >> 8) & 0xff);	
+		tampon[6]= (byte) ((chunk >> 16) & 0xff);
+		tampon[7]= (byte) ((chunk >> 24) & 0xff);
 		writer.push(tampon);
 	}
 	
