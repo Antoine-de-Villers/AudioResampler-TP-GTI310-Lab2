@@ -13,14 +13,14 @@ public class Console {
 		AudioFilter audioFilter;
 		Scanner sc = new Scanner(System.in);
 		boolean commandeValide = false;
-		
+		System.out.println(8000>>24); 
 		System.out.println("Audio Resample project!");
 		while (commandeValide != true) {
 			System.out.println("Veuillez enter la commande requise (/help pour voir les commandes accessibles)");
 			String commande = sc.nextLine().toLowerCase();
 			if (commande.equals("/help")) {
 				System.out.println("Voici les commandes disponibles: \n" + "/audiofilter \n/quit \nVous pouvez aussi "
-						+ "écrire la commande désirée et rajouter help à la suite afin de savoir à quoi sert cette commande"
+						+ "ï¿½crire la commande dï¿½sirï¿½e et rajouter help ï¿½ la suite afin de savoir ï¿½ quoi sert cette commande"
 						+ " (exemple /audioresample help");
 			}
 			else if (commande.equals("/quit")){
@@ -28,7 +28,7 @@ public class Console {
 			}
 			else if (commande.equals("/audiofilter")){
 				System.out.println("Veuillez entrer le nom du fichier a manipuler ainsi que le nom du fichier que"
-						+ " l'application créera dans le format suivant: \nfichierÀManipuler.wav fichierÀCréé.wav");
+						+ " l'application crï¿½era dans le format suivant: \nfichierï¿½Manipuler.wav fichierï¿½Crï¿½ï¿½.wav");
 				String fichiersRecus = sc.nextLine();
 				if (validateFormat(fichiersRecus)){
 				audioFilter = new ConcreteAudioFilter(fichierAManipuler, fichierACreer);
@@ -39,26 +39,26 @@ public class Console {
 				}	
 			}
 			else if (commande.equals("/quit help")){
-				System.out.println("Commande utilisée afin de quitter le programme (peut être utilisée à tout moment");
+				System.out.println("Commande utilisï¿½e afin de quitter le programme (peut ï¿½tre utilisï¿½e ï¿½ tout moment");
 			}
 			else if (commande.equals("/audiofilter help")){
 				System.out.println("Le programme audio filter prend en charge"
-						+ " un fichier .wav de 44.1 kHz de stéréo ou mono 8 ou 16 bits"
+						+ " un fichier .wav de 44.1 kHz de stï¿½rï¿½o ou mono 8 ou 16 bits"
 						+ " \npuis le manipule afin de "
 						+ "remettre un fichier .wav de 8kHz.");
 			}
 			else {
-				System.out.println("Vous avez entré une commande invalide");
+				System.out.println("Vous avez entrï¿½ une commande invalide");
 			}
 			if (commandeValide==true){
-				System.out.printf("\nLe programme s'est bien exécuté et le fichier %s a été créé. (/quit pour quitter) "
+				System.out.printf("\nLe programme s'est bien exï¿½cutï¿½ et le fichier %s a ï¿½tï¿½ crï¿½ï¿½. (/quit pour quitter) "
 						+ "\n\n\n\n", fichierACreer);
 				commandeValide=false;
 			}
 		}
 	}
 	public void quit(){
-		System.out.println("Merci d'avoir utilisé Audio Resample Project!");
+		System.out.println("Merci d'avoir utilisï¿½ Audio Resample Project!");
 		System.exit(0);
 	}
 	public boolean validateFormat(String s){
@@ -74,7 +74,7 @@ public class Console {
 			}
 		}catch (Exception e){
 			e.printStackTrace();
-			System.out.println("Vous n'avez pas respecter le format demandé");
+			System.out.println("Vous n'avez pas respecter le format demandï¿½");
 		}
 		return validate;
 	}
