@@ -1,11 +1,18 @@
 package gti310.tp2.audio;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
 
 import gti310.tp2.io.*;
 
 public class ConcreteAudioFilter implements AudioFilter {
 
+	File fichierAManipuler;
+	File fichierACreer;
 	FileSource reader;
 	FileSink writer;
 	byte[] tampon;
@@ -15,12 +22,14 @@ public class ConcreteAudioFilter implements AudioFilter {
 
 		try {
 			reader = new FileSource(fichierAManipuler);
+			this.fichierAManipuler = new File(fichierAManipuler);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		try {
 			writer = new FileSink(fichierACreer);
+			this.fichierACreer = new File(fichierACreer);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -42,11 +51,12 @@ public class ConcreteAudioFilter implements AudioFilter {
 		// nous devons diviser l'amplitude totale selon un temps de 5.125 sec.
 		// pour conserver un meme temps finale
 
-		downsample();
+		downSample();
 	}
-	
-	private void downsample(){
+
+	private void downSample() {
 		// resample the sample with correct frequency
+<<<<<<< HEAD
 		int sampleSize = 44100; //nombre de KHz du sample de base
 		int finalSampleSize = 8000; //nombre de KHz du sample ï¿½ la fin
 		int channelSize = ((int)tampon[22] & 0xff) + (((int) tampon[23] & 0xff) << 8);
@@ -61,10 +71,55 @@ public class ConcreteAudioFilter implements AudioFilter {
 				}
 				else {
 				tampon= reader.pop(6);	
+=======
+		int sampleSize = 44100; // nombre de KHz du sample de base
+		int finalSampleSize = 8000; // nombre de KHz du sample à la fin
+		int channelSize = ((int) tampon[22] & 0xff) + (((int) tampon[23] & 0xff) << 8);
+		int bitPerSample = ((int) tampon[34] & 0xff) + (((int) tampon[35] & 0xff) << 8);
+		double tempsFinal = getTime();
+		byte[] newTampon = new byte[1];
+		System.out.println(getTime());
+		double ratio = sampleSize / finalSampleSize; // ratio de conversion
+
+		for (int temps = 0; temps < tempsFinal; temps++) {
+
+			for (double i = 0; i < sampleSize; i = i + ratio) {
+				if (i - (int) i > 0.5) {
+					tampon = reader.pop(6);
+				} else {
+					tampon = reader.pop(5);
 				}
+				for (int j = 0; j < tampon.length - 1; j++) {
+					newTampon[0] += tampon[j];
+>>>>>>> origin/master
+				}
+				newTampon[0] /= tampon.length;
+				writer.push(newTampon);
+
+			}
 		}
-		
-		
+
+	}
+
+	private double getTime() {
+		AudioInputStream stream = null;
+
+		try {
+			stream = AudioSystem.getAudioInputStream(fichierAManipuler);
+
+			AudioFormat format = stream.getFormat();
+
+			return fichierAManipuler.length() / format.getSampleRate() / (format.getSampleSizeInBits() / 8.0)
+					/ format.getChannels();
+		} catch (Exception e) {
+			// log an error
+			return -1;
+		} finally {
+			try {
+				stream.close();
+			} catch (Exception ex) {
+			}
+		}
 	}
 
 	public boolean validate() {
