@@ -37,16 +37,13 @@ public class ConcreteAudioFilter implements AudioFilter {
 	}
 
 	@Override
-	public void process() {
-		
-		
-		
+	public void process() {	
 		read();
 	}
 	private void read() {
 		// nous devons diviser l'amplitude totale selon un temps de 5.125 sec.
 		// pour conserver un meme temps finale
-
+		changementHeader();
 		downSample();
 	}
 
@@ -136,6 +133,7 @@ public class ConcreteAudioFilter implements AudioFilter {
 		tampon[41]=	(byte) ((chunk >> 8) & 0xff);	
 		tampon[42]= (byte) ((chunk >> 16) & 0xff);
 		tampon[43]= (byte) ((chunk >> 24) & 0xff);
+		writer.push(tampon);
 	}
 	
 

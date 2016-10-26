@@ -20,7 +20,7 @@ public class Console {
 			String commande = sc.nextLine().toLowerCase();
 			if (commande.equals("/help")) {
 				System.out.println("Voici les commandes disponibles: \n" + "/audiofilter \n/quit \nVous pouvez aussi "
-						+ "�crire la commande d�sir�e et rajouter help � la suite afin de savoir � quoi sert cette commande"
+						+ "ecrire la commande desiree et rajouter help a la suite afin de savoir a quoi sert cette commande"
 						+ " (exemple /audioresample help");
 			}
 			else if (commande.equals("/quit")){
@@ -28,7 +28,7 @@ public class Console {
 			}
 			else if (commande.equals("/audiofilter")){
 				System.out.println("Veuillez entrer le nom du fichier a manipuler ainsi que le nom du fichier que"
-						+ " l'application cr�era dans le format suivant: \nfichier�Manipuler.wav fichier�Cr��.wav");
+						+ " l'application creera dans le format suivant: \nfichierAManipuler.wav fichierACree.wav");
 				String fichiersRecus = sc.nextLine();
 				if (validateFormat(fichiersRecus)){
 				audioFilter = new ConcreteAudioFilter(fichierAManipuler, fichierACreer);
@@ -39,26 +39,26 @@ public class Console {
 				}	
 			}
 			else if (commande.equals("/quit help")){
-				System.out.println("Commande utilis�e afin de quitter le programme (peut �tre utilis�e � tout moment");
+				System.out.println("Commande utilisee afin de quitter le programme (peut etre utilisee a tout moment");
 			}
 			else if (commande.equals("/audiofilter help")){
 				System.out.println("Le programme audio filter prend en charge"
-						+ " un fichier .wav de 44.1 kHz de st�r�o ou mono 8 ou 16 bits"
+						+ " un fichier .wav de 44.1 kHz de stereo ou mono 8 ou 16 bits"
 						+ " \npuis le manipule afin de "
 						+ "remettre un fichier .wav de 8kHz.");
 			}
 			else {
-				System.out.println("Vous avez entr� une commande invalide");
+				System.out.println("Vous avez entre une commande invalide");
 			}
 			if (commandeValide==true){
-				System.out.printf("\nLe programme s'est bien ex�cut� et le fichier %s a �t� cr��. (/quit pour quitter) "
+				System.out.printf("\nLe programme s'est bien execute et le fichier %s a ete cree. (/quit pour quitter) "
 						+ "\n\n\n\n", fichierACreer);
 				commandeValide=false;
 			}
 		}
 	}
 	public void quit(){
-		System.out.println("Merci d'avoir utilis� Audio Resample Project!");
+		System.out.println("Merci d'avoir utilise Audio Resample Project!");
 		System.exit(0);
 	}
 	public boolean validateFormat(String s){
@@ -74,7 +74,7 @@ public class Console {
 			}
 		}catch (Exception e){
 			e.printStackTrace();
-			System.out.println("Vous n'avez pas respecter le format demand�");
+			System.out.println("Vous n'avez pas respecter le format demande");
 		}
 		return validate;
 	}
