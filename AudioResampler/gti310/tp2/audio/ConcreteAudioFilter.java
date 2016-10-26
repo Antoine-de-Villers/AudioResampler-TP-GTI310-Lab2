@@ -39,10 +39,6 @@ public class ConcreteAudioFilter implements AudioFilter {
 	@Override
 	public void process() {
 		
-		tampon[24]= (byte) 8000;
-		tampon[25]=	(byte) (8000 >> 8) & 0xff;	
-		tampon[26]= (byte) (8000 >> 16) & 0xff;
-		tampon[27]= (byte) (8000 >> 24) & 0xff;
 		
 		
 		read();
@@ -57,7 +53,7 @@ public class ConcreteAudioFilter implements AudioFilter {
 	private void downSample() {
 		// resample the sample with correct frequency
 		int sampleSize = 44100; // nombre de KHz du sample de base
-		int finalSampleSize = 8000; // nombre de KHz du sample à la fin
+		int finalSampleSize = 8000; // nombre de KHz du sample ï¿½ la fin
 		int channelSize = ((int) tampon[22] & 0xff) + (((int) tampon[23] & 0xff) << 8);
 		int bitPerSample = ((int) tampon[34] & 0xff) + (((int) tampon[35] & 0xff) << 8);
 		double tempsFinal = getTime();
@@ -108,6 +104,38 @@ public class ConcreteAudioFilter implements AudioFilter {
 		//Changement chunkSize[4-7], sampleRate[24-27], byteRate[28-31], Subchunk2Size[40-43]  
 		
 		
+		//changement sample rate;
+		tampon[24]= (byte) 8000;
+		tampon[25]=	(byte) ((8000 >> 8) & 0xff);	
+		tampon[26]= (byte) ((8000 >> 16) & 0xff);
+		tampon[27]= (byte) ((8000 >> 24) & 0xff);
+		
+		//changement byte rate
+		int byteChange = (((int) tampon[28] & 0xff)) + (((int) tampon[29] & 0xff) << 8) + (((int) tampon[30] & 0xff) << 16)
+				+ (((int) tampon[31] & 0xff));
+		byteChange /=5.5125;
+				
+		tampon[24]= (byte) byteChange;
+		tampon[25]=	(byte) ((byteChange >> 8) & 0xff);	
+		tampon[26]= (byte) ((byteChange >> 16) & 0xff);
+		tampon[27]= (byte) ((byteChange >> 24) & 0xff);		
+		
+		//changement de subchunk2size
+		byteChange = (((int) tampon[40] & 0xff)) + (((int) tampon[41] & 0xff) << 8) + (((int) tampon[42] & 0xff) << 16)
+				+ (((int) tampon[43] & 0xff));
+		int chunk = byteChange +36;
+		byteChange /=5.5125;
+		
+		tampon[40]= (byte) byteChange;
+		tampon[41]=	(byte) ((byteChange >> 8) & 0xff);	
+		tampon[42]= (byte) ((byteChange >> 16) & 0xff);
+		tampon[43]= (byte) ((byteChange >> 24) & 0xff);
+		
+		//changement chunk
+		tampon[40]= (byte) chunk;
+		tampon[41]=	(byte) ((chunk >> 8) & 0xff);	
+		tampon[42]= (byte) ((chunk >> 16) & 0xff);
+		tampon[43]= (byte) ((chunk >> 24) & 0xff);
 	}
 	
 
