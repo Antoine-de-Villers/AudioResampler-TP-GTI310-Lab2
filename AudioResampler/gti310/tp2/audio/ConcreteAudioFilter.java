@@ -56,22 +56,34 @@ public class ConcreteAudioFilter implements AudioFilter {
 		double tempsFinal = getTime();
 		byte[] newTampon = new byte[1];
 		System.out.println(getTime());
-		double ratio = (double)sampleSize / (double)finalSampleSize; // ratio de conversion
+		double ratio = 5.5125; // ratio de conversion
 
 		for (int temps = 0; temps <= tempsFinal; temps++) {
 			
-			for (double i = 0; i < sampleSize*channelSize*bitPerSample/8; i = i + ratio) {
-				if (i - ((int) i) > (ratio/10)) {
-					tampon = reader.pop(6);
-				} else {
-					tampon = reader.pop(5);
+			for (double i = 5.5120; i < sampleSize*channelSize*bitPerSample/8; i = i + ratio) {
+				
+				if(bitPerSample == 8){
+					if (i - ((int) i) > (0.5125)) {
+						tampon = reader.pop(5);
+					} else {
+						tampon = reader.pop(6);
+					}
+					newTampon[0] = tampon[0];
+					writer.push(newTampon);	
 				}
-				for (int j = 0; j < tampon.length; j++) {
-					newTampon[0] += tampon[j];
-				}
-				newTampon[0] /= tampon.length;
-				writer.push(newTampon);
-			}
+				
+				/*** PARTI QUI MARCHE PAS ENCORE ****
+				else{
+					if (i - ((int) i) > (0.5125)) {
+						tampon = reader.pop(5*2);
+					} else {
+						tampon = reader.pop(6*2);
+					}
+					newTampon[0] = tampon[0];
+					newTampon[1] = tampon[1];
+					writer.push(newTampon);
+				}*/
+			}	
 		}
 	}
 

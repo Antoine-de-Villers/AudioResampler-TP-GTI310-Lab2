@@ -13,7 +13,7 @@ public class Console {
 		AudioFilter audioFilter;
 		Scanner sc = new Scanner(System.in);
 		boolean commandeValide = false;
-		 
+		
 		System.out.println("Audio Resample project!");
 		while (commandeValide != true) {
 			System.out.println("Veuillez enter la commande requise (/help pour voir les commandes accessibles)");
