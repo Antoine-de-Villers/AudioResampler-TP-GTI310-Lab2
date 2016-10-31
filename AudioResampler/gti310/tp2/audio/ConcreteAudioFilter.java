@@ -21,14 +21,14 @@ public class ConcreteAudioFilter implements AudioFilter {
 
 		try {
 			reader = new FileSource(fichierAManipuler);
-			this.fichierAManipuler= new File(fichierAManipuler);
+			this.fichierAManipuler = new File(fichierAManipuler);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		try {
 			writer = new FileSink(fichierACreer);
-			this.fichierACreer= new File(fichierACreer);
+			this.fichierACreer = new File(fichierACreer);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -37,9 +37,10 @@ public class ConcreteAudioFilter implements AudioFilter {
 	}
 
 	@Override
-	public void process() {	
+	public void process() {
 		read();
 	}
+
 	private void read() {
 		// nous devons diviser l'amplitude totale selon un temps de 5.125 sec.
 		// pour conserver un meme temps finale
@@ -54,36 +55,62 @@ public class ConcreteAudioFilter implements AudioFilter {
 		int channelSize = ((int) tampon[22] & 0xff) + (((int) tampon[23] & 0xff) << 8);
 		int bitPerSample = ((int) tampon[34] & 0xff) + (((int) tampon[35] & 0xff) << 8);
 		double tempsFinal = getTime();
-		byte[] newTampon = new byte[1];
+		byte[] newTampon = new byte[1 * bitPerSample / 8 * channelSize];
 		System.out.println(getTime());
 		double ratio = 5.5125; // ratio de conversion
 
 		for (int temps = 0; temps <= tempsFinal; temps++) {
-			
-			for (double i = 5.5120; i < sampleSize*channelSize*bitPerSample/8; i = i + ratio) {
-				
-				if(bitPerSample == 8){
-					if (i - ((int) i) > (0.5125)) {
-						tampon = reader.pop(5);
-					} else {
-						tampon = reader.pop(6);
+
+			for (double i = 5.5120; i < sampleSize * channelSize * bitPerSample / 8; i = i + ratio) {
+
+				if (channelSize == 1) {
+					if (bitPerSample == 8) {
+						if (i - ((int) i) > (0.5125)) {
+							tampon = reader.pop(5);
+						} else {
+							tampon = reader.pop(6);
+						}
+						newTampon[0] = tampon[0];
+						writer.push(newTampon);
 					}
-					newTampon[0] = tampon[0];
-					writer.push(newTampon);	
+
+					else {
+						if (i - ((int) i) > (0.5125)) {
+							tampon = reader.pop(10);
+						} else {
+							tampon = reader.pop(12);
+						}
+						newTampon[0] = tampon[0];
+						newTampon[1] = tampon[1];
+						writer.push(newTampon);
+					}
+				} else if (channelSize == 2) {
+					if (bitPerSample == 8) {
+						if (i - ((int) i) > (0.5125)) {
+							tampon = reader.pop(10);
+						} else {
+							tampon = reader.pop(12);
+						}
+						newTampon[0] = tampon[0];
+						newTampon[1] = tampon[1];
+						writer.push(newTampon);
+					}
+
+					else {
+						if (i - ((int) i) > (0.5125)) {
+							tampon = reader.pop(20);
+						} else {
+							tampon = reader.pop(24);
+						}
+						newTampon[0] = tampon[0];
+						newTampon[1] = tampon[1];
+						newTampon[2] = tampon[2];
+						newTampon[3] = tampon[3];
+						writer.push(newTampon);
+					}
+
 				}
-				
-				/*** PARTI QUI MARCHE PAS ENCORE ****
-				else{
-					if (i - ((int) i) > (0.5125)) {
-						tampon = reader.pop(5*2);
-					} else {
-						tampon = reader.pop(6*2);
-					}
-					newTampon[0] = tampon[0];
-					newTampon[1] = tampon[1];
-					writer.push(newTampon);
-				}*/
-			}	
+			}
 		}
 	}
 
@@ -107,45 +134,45 @@ public class ConcreteAudioFilter implements AudioFilter {
 			}
 		}
 	}
-	private void changementHeader(){
-		//Changement chunkSize[4-7], sampleRate[24-27], byteRate[28-31], Subchunk2Size[40-43]  
-		
-		
-		//changement sample rate;
-		tampon[24]= (byte) 8000;
-		tampon[25]=	(byte) ((8000 >> 8) & 0xff);	
-		tampon[26]= (byte) ((8000 >> 16) & 0xff);
-		tampon[27]= (byte) ((8000 >> 24) & 0xff);
-		
-		//changement byte rate
-		int byteChange = (((int) tampon[28] & 0xff)) + (((int) tampon[29] & 0xff) << 8) + (((int) tampon[30] & 0xff) << 16)
-				+ (((int) tampon[31] & 0xff));
-		byteChange /=5.5125;
-				
-		tampon[28]= (byte) byteChange;
-		tampon[29]=	(byte) ((byteChange >> 8) & 0xff);	
-		tampon[30]= (byte) ((byteChange >> 16) & 0xff);
-		tampon[31]= (byte) ((byteChange >> 24) & 0xff);		
-		
-		//changement de subchunk2size
+
+	private void changementHeader() {
+		// Changement chunkSize[4-7], sampleRate[24-27], byteRate[28-31],
+		// Subchunk2Size[40-43]
+
+		// changement sample rate;
+		tampon[24] = (byte) 8000;
+		tampon[25] = (byte) ((8000 >> 8) & 0xff);
+		tampon[26] = (byte) ((8000 >> 16) & 0xff);
+		tampon[27] = (byte) ((8000 >> 24) & 0xff);
+
+		// changement byte rate
+		int byteChange = (((int) tampon[28] & 0xff)) + (((int) tampon[29] & 0xff) << 8)
+				+ (((int) tampon[30] & 0xff) << 16) + (((int) tampon[31] & 0xff));
+		byteChange /= 5.5125;
+
+		tampon[28] = (byte) byteChange;
+		tampon[29] = (byte) ((byteChange >> 8) & 0xff);
+		tampon[30] = (byte) ((byteChange >> 16) & 0xff);
+		tampon[31] = (byte) ((byteChange >> 24) & 0xff);
+
+		// changement de subchunk2size
 		byteChange = (((int) tampon[40] & 0xff)) + (((int) tampon[41] & 0xff) << 8) + (((int) tampon[42] & 0xff) << 16)
 				+ (((int) tampon[43] & 0xff));
-		int chunk = byteChange +36;
-		byteChange /=5.5125;
-		
-		tampon[40]= (byte) byteChange;
-		tampon[41]=	(byte) ((byteChange >> 8) & 0xff);	
-		tampon[42]= (byte) ((byteChange >> 16) & 0xff);
-		tampon[43]= (byte) ((byteChange >> 24) & 0xff);
-		
-		//changement chunk
-		tampon[4]= (byte) chunk;
-		tampon[5]=	(byte) ((chunk >> 8) & 0xff);	
-		tampon[6]= (byte) ((chunk >> 16) & 0xff);
-		tampon[7]= (byte) ((chunk >> 24) & 0xff);
+		int chunk = byteChange + 36;
+		byteChange /= 5.5125;
+
+		tampon[40] = (byte) byteChange;
+		tampon[41] = (byte) ((byteChange >> 8) & 0xff);
+		tampon[42] = (byte) ((byteChange >> 16) & 0xff);
+		tampon[43] = (byte) ((byteChange >> 24) & 0xff);
+
+		// changement chunk
+		tampon[4] = (byte) chunk;
+		tampon[5] = (byte) ((chunk >> 8) & 0xff);
+		tampon[6] = (byte) ((chunk >> 16) & 0xff);
+		tampon[7] = (byte) ((chunk >> 24) & 0xff);
 		writer.push(tampon);
 	}
-	
 
 	public boolean validate() {
 		tampon = reader.pop(44);
