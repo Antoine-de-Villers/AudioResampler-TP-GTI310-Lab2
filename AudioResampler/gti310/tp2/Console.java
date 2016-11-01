@@ -8,13 +8,15 @@ public class Console {
 
 	private String fichierAManipuler, fichierACreer="";
 	
-	
+	//Complexity O(1)
 	public void run(){
 		AudioFilter audioFilter;
 		Scanner sc = new Scanner(System.in);
 		boolean commandeValide = false;
 		
 		System.out.println("Audio Resample project!");
+		//Complexity O(n)
+		//where n = number of time you run a command that is not /quit
 		while (commandeValide != true) {
 			System.out.println("Veuillez enter la commande requise (/help pour voir les commandes accessibles)");
 			String commande = sc.nextLine().toLowerCase();
@@ -57,10 +59,14 @@ public class Console {
 			}
 		}
 	}
+	
+	//Complexity O(1)
 	public void quit(){
 		System.out.println("Merci d'avoir utilise Audio Resample Project!");
 		System.exit(0);
 	}
+	
+	//Complexity O(1)
 	public boolean validateFormat(String s){
 		boolean validate = false;
 		try {

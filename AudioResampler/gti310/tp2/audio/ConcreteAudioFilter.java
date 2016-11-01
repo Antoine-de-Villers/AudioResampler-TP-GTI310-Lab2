@@ -16,6 +16,7 @@ public class ConcreteAudioFilter implements AudioFilter {
 	FileSink writer;
 	byte[] tampon;
 
+	//Complexity O(1)
 	public ConcreteAudioFilter(String fichierAManipuler, String fichierACreer) {
 		// TODO Auto-generated constructor stub
 
@@ -36,18 +37,16 @@ public class ConcreteAudioFilter implements AudioFilter {
 
 	}
 
+	//Complexity O(1)
 	@Override
 	public void process() {
-		read();
-	}
-
-	private void read() {
 		// nous devons diviser l'amplitude totale selon un temps de 5.125 sec.
 		// pour conserver un meme temps finale
 		changementHeader();
 		downSample();
 	}
 
+	//Complexity O(n)
 	private void downSample() {
 		// resample the sample with correct frequency
 		int sampleSize = 44100; // nombre de KHz du sample de base
@@ -59,10 +58,12 @@ public class ConcreteAudioFilter implements AudioFilter {
 		System.out.println(getTime());
 		double ratio = 5.5125; // ratio de conversion
 
+		//Complexity O(n)
+		//where n is the number of values
 		for (int temps = 0; temps <= tempsFinal; temps++) {
 
 			for (double i = 5.5120; i < sampleSize * channelSize * bitPerSample / 8; i = i + ratio) {
-
+				
 				if (channelSize == 1) {
 					if (bitPerSample == 8) {
 						if (i - ((int) i) > (0.5125)) {
@@ -113,7 +114,7 @@ public class ConcreteAudioFilter implements AudioFilter {
 			}
 		}
 	}
-
+	//Complexity O(1)
 	private double getTime() {
 		AudioInputStream stream = null;
 
@@ -134,7 +135,8 @@ public class ConcreteAudioFilter implements AudioFilter {
 			}
 		}
 	}
-
+	
+	//Complexity O(1)
 	private void changementHeader() {
 		// Changement chunkSize[4-7], sampleRate[24-27], byteRate[28-31],
 		// Subchunk2Size[40-43]
@@ -173,7 +175,8 @@ public class ConcreteAudioFilter implements AudioFilter {
 		tampon[7] = (byte) ((chunk >> 24) & 0xff);
 		writer.push(tampon);
 	}
-
+	
+	//Complexity O(1)
 	public boolean validate() {
 		tampon = reader.pop(44);
 		// verification Format in big endian
