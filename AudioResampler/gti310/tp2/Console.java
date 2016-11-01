@@ -34,8 +34,8 @@ public class Console {
 				audioFilter = new ConcreteAudioFilter(fichierAManipuler, fichierACreer);
 				if (((ConcreteAudioFilter) audioFilter).validate()){
 				audioFilter.process();
-				}
 				commandeValide = true;
+				}
 				}	
 			}
 			else if (commande.equals("/quit help")){
